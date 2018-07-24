@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <button onclick="created()">create</button>
+  <button onclick="closeWs()">close</button>
+  <div id="result"></div>
+</body>
+<script>
+  var ws = null
+  var result = ''
+  var div = document.getElementById('result')
+  function created () {
+    ws = new WebSocket('ws://127.0.0.1:8001');
+ 
+      ws.onopen = function(e){
+          console.log("连接服务器成功");
+		      console.log(ws.readyState)
+          ws.send("get random");
+      }
+      ws.onclose = function(e){
+          console.log("服务器关闭");
+		      console.log(ws.readyState)
+      }
+      ws.onerror = function(){
+          console.log("连接出错");
+		      console.log(ws.readyState)
+      }
+
+      ws.onmessage = function(e){
+          result += `<p>${e.data}</p>`
+          div.innerHTML = result
+      }
+  }
+
+  function closeWs () {
+    console.log('close')
+    ws.close()
+  }
+</script>
+</html>
